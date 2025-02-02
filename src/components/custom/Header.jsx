@@ -38,7 +38,7 @@ const Header = ({ children }) => {
     toast.success("Logged out successfully");
   };
 
-  const isMobile = useMediaQuery("(max-width: 640px)");
+  const isSmallScreen = useMediaQuery("(max-width: 1024px)");
 
   return (
     <div className="h-screen w-full flex flex-col justify-between">
@@ -47,9 +47,9 @@ const Header = ({ children }) => {
         <div className="flex items-center gap-2">
           <Logo size="sm" style="" />
         </div>
-        {!isMobile && (
+        {!isSmallScreen && (
           <Tabs value={page} onValueChange={setPage}>
-            <TabsList className="flex bg-black">
+            <TabsList className="bg-transparent flex items-center">
               <TabsTrigger
                 value="notes"
                 className={`flex items-center gap-1 cursor-pointer px-4 py-1.5 rounded-full data-[state=active]:bg-neutral-300 data-[state=active]:text-black`}
@@ -67,7 +67,7 @@ const Header = ({ children }) => {
             </TabsList>
           </Tabs>
         )}
-        {!isMobile ? (
+        {!isSmallScreen ? (
           <Sheet className="border">
             <SheetTrigger className="flex gap-2 items-center">
               <Avatar>
@@ -81,8 +81,8 @@ const Header = ({ children }) => {
                 <Image
                   src={data?.user?.avatar}
                   alt="avatar"
-                  width={isMobile ? 150 : 200}
-                  height={isMobile ? 150 : 200}
+                  width={isSmallScreen ? 150 : 200}
+                  height={isSmallScreen ? 150 : 200}
                 />
                 <Pencil className="-mt-8 bg-black w-10 h-8 p-1 sm:w-14 sm:h-10 sm:p-2 border-2 border-white rounded-full" />
               </div>
@@ -101,20 +101,12 @@ const Header = ({ children }) => {
           <div className="text-nowrap">{`hi ${data?.user?.username}!`}</div>
         )}
       </div>
-      <div className="w-full flex-1 bg-neutral-900">{children}</div>
+      <div className="w-full flex-1 bg-neutral-800">{children}</div>
       {/* footer (only for mobile sizes) */}
-      {isMobile && (
+      {isSmallScreen && (
         <div className="w-full h-[60px] px-4 flex justify-between items-center">
-          {/* <div className="flex items-center gap-1 cursor-pointer bg-neutral-800 px-4 py-2 rounded-full">
-            <NotepadText className="size-8" />
-            <span>Notes</span>
-          </div>
-          <div className="flex items-center gap-1 cursor-pointer bg-neutral-800 px-4 py-2 rounded-full">
-            <ListTodo className="size-8" />
-            <span>Todos</span>
-          </div> */}
           <Tabs value={page} onValueChange={setPage}>
-            <TabsList className="flex bg-black">
+            <TabsList className="bg-transparent flex items-center">
               <TabsTrigger
                 value="notes"
                 className={`flex items-center gap-1 cursor-pointer px-4 py-1.5 rounded-full data-[state=active]:bg-neutral-300 data-[state=active]:text-black`}
@@ -143,8 +135,8 @@ const Header = ({ children }) => {
                 <Image
                   src={data?.user?.avatar}
                   alt="avatar"
-                  width={isMobile ? 150 : 200}
-                  height={isMobile ? 150 : 200}
+                  width={isSmallScreen ? 150 : 200}
+                  height={isSmallScreen ? 150 : 200}
                 />
                 <Pencil className="-mt-7 bg-black w-10 h-8 p-1 sm:w-14 sm:h-10 sm:p-2 border-2 border-white rounded-full" />
               </div>
