@@ -14,10 +14,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
+import LoaderFullPage from "@/components/custom/LoaderFullPage";
+import { useState } from "react";
 
 const LoginForm = () => {
-  const router = useRouter();
+  const [waiting, setWaiting] = useState(false);
 
   const formController = useForm({
     resolver: zodResolver(loginSchema),
@@ -34,20 +35,28 @@ const LoginForm = () => {
       identifier: data.identifier,
       password: data.password,
     };
-    const res = await signIn("credentials", {
-      ...payload,
-      redirect: false,
-    });
+    setWaiting(true);
+    try {
+      const res = await signIn("credentials", {
+        ...payload,
+        redirect: false,
+      });
 
-    if (res.error) {
-      toast.error("Login failed, Invalid credentials");
-    } else {
-      toast.success("Login successful",{autoClose: 1000});
+      if (res.error) {
+        toast.error("Login failed, Invalid credentials");
+      } else {
+        toast.success("Login successful", { autoClose: 1000 });
+      }
+    } catch (error) {
+      toast.error("Unexpected error occurred");
+    } finally {
+      setWaiting(false);
     }
   };
 
   return (
     <Form {...formController}>
+      {waiting && <LoaderFullPage />}
       <form
         onSubmit={formController.handleSubmit(onSubmit)}
         className="text-left flex flex-col gap-2 items-center"
