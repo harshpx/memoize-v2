@@ -41,9 +41,9 @@ const Header = ({ children }) => {
   const isSmallScreen = useMediaQuery("(max-width: 1024px)");
 
   return (
-    <div className="h-screen w-full flex flex-col justify-between">
+    <div className="h-screen w-full">
       {/* header */}
-      <div className="w-full flex items-center justify-between px-4 h-[55px] sm:h-[60px]">
+      <div className="w-full flex items-center justify-between px-4 h-[55px] lg:h-[60px]">
         <div className="flex items-center gap-2">
           <Logo size="sm" style="" />
         </div>
@@ -106,10 +106,10 @@ const Header = ({ children }) => {
         )}
       </div>
       {/* children: Dashboard to be wrapped inside */}
-      <div className="w-full flex-1 bg-neutral-800">{children}</div>
+      <div className="w-full h-[calc(100vh-110px)] lg:h-[calc(100vh-60px)] bg-neutral-900">{children}</div>
       {/* footer (only for small screens) */}
       {isSmallScreen && (
-        <div className="w-full h-[60px] px-4 flex justify-between items-center">
+        <div className="w-full h-[55px] px-4 flex justify-between items-center">
           <Tabs value={page} onValueChange={setPage}>
             <TabsList className="bg-transparent flex items-center">
               <TabsTrigger
