@@ -1,5 +1,5 @@
 "use client";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/custom/Logo";
@@ -10,7 +10,6 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-  SheetFooter,
 } from "@/components/ui/sheet";
 import {
   Drawer,
@@ -21,14 +20,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { NotepadText, ListTodo } from "lucide-react";
@@ -84,7 +75,7 @@ const Header = ({ children }) => {
                 <AvatarImage src={avatar} />
                 <AvatarFallback>DP</AvatarFallback>
               </Avatar>
-              <div className="text-nowrap">{`hi ${username}!`}</div>
+              <div className="text-nowrap">{`Hi ${username}!`}</div>
             </SheetTrigger>
             <SheetContent className="flex flex-col items-center justify-between">
               <div>
@@ -111,7 +102,7 @@ const Header = ({ children }) => {
             </SheetContent>
           </Sheet>
         ) : (
-          <div className="text-nowrap">{`hi ${username}!`}</div>
+          <div className="text-nowrap">{`Hi ${username}!`}</div>
         )}
       </div>
       <div className="w-full flex-1 bg-neutral-800">{children}</div>
