@@ -38,6 +38,7 @@ const AvatarSelector = ({ className }) => {
     const currAvatar = avatar;
     setAvatar(url);
     try {
+      setOpen(false);
       const res = await fetch("/api/update-avatar", {
         method: "PUT",
         headers: {
@@ -48,7 +49,6 @@ const AvatarSelector = ({ className }) => {
       const data = await res.json();
       if (data.success) {
         toast.success(data.message, { autoClose: 1000 });
-        setOpen(false);
       } else {
         setAvatar(currAvatar);
         toast.error(data.message);
