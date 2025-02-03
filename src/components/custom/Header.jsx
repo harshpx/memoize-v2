@@ -10,10 +10,10 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
+  SheetFooter,
 } from "@/components/ui/sheet";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerFooter,
@@ -22,18 +22,22 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Pencil, X, NotepadText, ListTodo } from "lucide-react";
+import { NotepadText, ListTodo } from "lucide-react";
 import Image from "next/image";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { useContext } from "react";
 import { AppContext } from "@/store/AppContext";
 import AvatarSelector from "@/components/custom/AvatarSelector";
+import Branding from "./Branding";
 
 const Header = ({ children }) => {
   const { username, avatar, email, page, setPage } = useContext(AppContext);
@@ -72,6 +76,7 @@ const Header = ({ children }) => {
             </TabsList>
           </Tabs>
         )}
+        {/* Sheet(sidebar) trigger button on top bar for big screens + only user*/}
         {!isSmallScreen ? (
           <Sheet className="border">
             <SheetTrigger className="flex gap-2 items-center">
@@ -81,25 +86,28 @@ const Header = ({ children }) => {
               </Avatar>
               <div className="text-nowrap">{`hi ${username}!`}</div>
             </SheetTrigger>
-            <SheetContent>
-              <div className="w-full mt-5 sm:mt-12 mb-5 flex flex-col gap-2 items-center">
-                <Image
-                  src={avatar}
-                  alt="avatar"
-                  width={isSmallScreen ? 150 : 200}
-                  height={isSmallScreen ? 150 : 200}
-                />
-                <AvatarSelector className="-mt-8"/>
+            <SheetContent className="flex flex-col items-center justify-between">
+              <div>
+                <div className="w-full mt-5 sm:mt-12 mb-5 flex flex-col gap-2 items-center">
+                  <Image
+                    src={avatar}
+                    alt="avatar"
+                    width={isSmallScreen ? 150 : 200}
+                    height={isSmallScreen ? 150 : 200}
+                  />
+                  <AvatarSelector className="-mt-8" />
+                </div>
+                <SheetHeader className="w-full">
+                  <SheetTitle className="text-3xl font-[500] text-center">{`Hi ${username}!`}</SheetTitle>
+                  <SheetDescription className="text-center">{`Welcome to Memoize`}</SheetDescription>
+                </SheetHeader>
+                <div className="w-full my-4 flex justify-center">
+                  <Button className="" onClick={signoutHandler}>
+                    Logout
+                  </Button>
+                </div>
               </div>
-              <SheetHeader className="w-full">
-                <SheetTitle className="text-3xl font-[500] text-center">{`Hi ${username}!`}</SheetTitle>
-                <SheetDescription className="text-center">{`Welcome to Memoize`}</SheetDescription>
-              </SheetHeader>
-              <div className="w-full my-4 flex justify-center">
-                <Button className="" onClick={signoutHandler}>
-                  Logout
-                </Button>
-              </div>
+              <Branding className="text-sm"/>
             </SheetContent>
           </Sheet>
         ) : (
@@ -107,7 +115,7 @@ const Header = ({ children }) => {
         )}
       </div>
       <div className="w-full flex-1 bg-neutral-800">{children}</div>
-      {/* footer (only for mobile sizes) */}
+      {/* footer (only for small screens) */}
       {isSmallScreen && (
         <div className="w-full h-[60px] px-4 flex justify-between items-center">
           <Tabs value={page} onValueChange={setPage}>
@@ -143,7 +151,7 @@ const Header = ({ children }) => {
                   width={isSmallScreen ? 150 : 200}
                   height={isSmallScreen ? 150 : 200}
                 />
-                <AvatarSelector className="-mt-7"/>
+                <AvatarSelector className="-mt-7" />
               </div>
               <DrawerHeader className="w-full">
                 <DrawerTitle className="text-3xl font-[500] text-center">{`Hi ${username}!`}</DrawerTitle>
@@ -154,6 +162,9 @@ const Header = ({ children }) => {
                   Logout
                 </Button>
               </div>
+              <DrawerFooter>
+                <Branding className="text-sm"/>
+              </DrawerFooter>
             </DrawerContent>
           </Drawer>
         </div>

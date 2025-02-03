@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Heart } from "lucide-react";
+import Branding from "./Branding";
 
 const tabs = [
   {
@@ -99,20 +100,7 @@ const Register = () => {
           ))}
         </Tabs>
       </div>
-      <div className="my-8 text-neutral-400 flex items-center gap-2">
-        <span>Made with</span>
-        <Heart />
-        <span>
-          <span>by </span>
-          <a
-            className="text-sky-400 underline"
-            href="https://harshpriye.in"
-            target="_blank"
-          >
-            Harsh Priye
-          </a>
-        </span>
-      </div>
+      <Branding className="my-4 md:my-8" />
     </div>
   );
 };
