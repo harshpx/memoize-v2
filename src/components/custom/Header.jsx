@@ -31,7 +31,7 @@ import AvatarSelector from "@/components/custom/AvatarSelector";
 import Branding from "./Branding";
 
 const Header = ({ children }) => {
-  const { username, avatar, email, page, setPage } = useContext(AppContext);
+  const { user, page, setPage } = useContext(AppContext);
 
   const signoutHandler = () => {
     signOut();
@@ -72,16 +72,16 @@ const Header = ({ children }) => {
           <Sheet className="border">
             <SheetTrigger className="flex gap-2 items-center">
               <Avatar>
-                <AvatarImage src={avatar} />
+                <AvatarImage src={user?.avatar} />
                 <AvatarFallback>DP</AvatarFallback>
               </Avatar>
-              <div className="text-nowrap">{`Hi ${username}!`}</div>
+              <div className="text-nowrap">{`Hi ${user?.username}!`}</div>
             </SheetTrigger>
             <SheetContent className="flex flex-col items-center justify-between">
               <div>
                 <div className="w-full mt-5 sm:mt-12 mb-5 flex flex-col gap-2 items-center">
                   <Image
-                    src={avatar}
+                    src={user?.avatar}
                     alt="avatar"
                     width={isSmallScreen ? 150 : 200}
                     height={isSmallScreen ? 150 : 200}
@@ -89,7 +89,7 @@ const Header = ({ children }) => {
                   <AvatarSelector className="-mt-8" />
                 </div>
                 <SheetHeader className="w-full">
-                  <SheetTitle className="text-3xl font-[500] text-center">{`Hi ${username}!`}</SheetTitle>
+                  <SheetTitle className="text-3xl font-[500] text-center">{`Hi ${user?.username}!`}</SheetTitle>
                   <SheetDescription className="text-center">{`Welcome to Memoize`}</SheetDescription>
                 </SheetHeader>
                 <div className="w-full my-4 flex justify-center">
@@ -98,13 +98,14 @@ const Header = ({ children }) => {
                   </Button>
                 </div>
               </div>
-              <Branding className="text-sm"/>
+              <Branding className="text-sm" />
             </SheetContent>
           </Sheet>
         ) : (
-          <div className="text-nowrap">{`Hi ${username}!`}</div>
+          <div className="text-nowrap">{`Hi ${user?.username}!`}</div>
         )}
       </div>
+      {/* children: Dashboard to be wrapped inside */}
       <div className="w-full flex-1 bg-neutral-800">{children}</div>
       {/* footer (only for small screens) */}
       {isSmallScreen && (
@@ -130,14 +131,14 @@ const Header = ({ children }) => {
           <Drawer>
             <DrawerTrigger>
               <Avatar className="w-11 h-11 border-2 active:border-white">
-                <AvatarImage src={avatar} />
+                <AvatarImage src={user?.avatar} />
                 <AvatarFallback>DP</AvatarFallback>
               </Avatar>
             </DrawerTrigger>
             <DrawerContent className="">
               <div className="w-full mt-10 sm:mt-12 mb-2 flex flex-col gap-2 items-center">
                 <Image
-                  src={avatar}
+                  src={user?.avatar}
                   alt="avatar"
                   width={isSmallScreen ? 150 : 200}
                   height={isSmallScreen ? 150 : 200}
@@ -145,7 +146,7 @@ const Header = ({ children }) => {
                 <AvatarSelector className="-mt-7" />
               </div>
               <DrawerHeader className="w-full">
-                <DrawerTitle className="text-3xl font-[500] text-center">{`Hi ${username}!`}</DrawerTitle>
+                <DrawerTitle className="text-3xl font-[500] text-center">{`Hi ${user?.username}!`}</DrawerTitle>
                 <DrawerDescription className="text-center">{`Welcome to Memoize`}</DrawerDescription>
               </DrawerHeader>
               <div className="w-full my-4 flex justify-center">
@@ -154,7 +155,7 @@ const Header = ({ children }) => {
                 </Button>
               </div>
               <DrawerFooter>
-                <Branding className="text-sm"/>
+                <Branding className="text-sm" />
               </DrawerFooter>
             </DrawerContent>
           </Drawer>

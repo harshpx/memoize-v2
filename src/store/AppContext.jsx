@@ -7,28 +7,15 @@ export const AppContext = createContext({
   setDark: () => {},
   page: "notes",
   setPage: () => {},
-  username: "",
-  setUsername: () => {},
-  avatar: "",
-  setAvatar: () => {},
-  email: "",
-  setEmail: () => {},
-  password: "",
-  setPassword: () => {},
-  notes: [],
-  setNotes: () => {},
+  user: null,
+  setUser: () => {},
 });
 
 const ContextProvider = ({ children }) => {
   const { status } = useSession();
   const [dark, setDark] = useState(true);
   const [page, setPage] = useState("notes");
-
-  const [username, setUsername] = useState("");
-  const [avatar, setAvatar] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [notes, setNotes] = useState([]);
+  const [user, setUser] = useState(null);
 
   const [waiting, setWaiting] = useState(false);
 
@@ -40,11 +27,7 @@ const ContextProvider = ({ children }) => {
           const response = await fetch("/api/fetch-user-data");
           const data = await response.json();
           if (data.success) {
-            setUsername(data.user.username);
-            setAvatar(data.user.avatar);
-            setEmail(data.user.email);
-            setPassword(data.user.password);
-            setNotes(data.user.notes);
+            setUser(data.user);
           }
         } catch (error) {
           console.error(error);
@@ -62,16 +45,8 @@ const ContextProvider = ({ children }) => {
         setDark,
         page,
         setPage,
-        username,
-        setUsername,
-        avatar,
-        setAvatar,
-        email,
-        setEmail,
-        password,
-        setPassword,
-        notes,
-        setNotes,
+        user,
+        setUser,
       }}
     >
       {waiting && <LoaderFullPage />}

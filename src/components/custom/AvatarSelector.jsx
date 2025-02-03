@@ -32,11 +32,11 @@ const avatarOptions = [
 const AvatarSelector = ({ className }) => {
   const [open, setOpen] = useState(false);
   const isSmallScreen = useMediaQuery("(max-width: 1024px)");
-  const { avatar, setAvatar } = useContext(AppContext);
+  const { user, setUser } = useContext(AppContext);
 
   const updateAvatar = async (url) => {
-    const currAvatar = avatar;
-    setAvatar(url);
+    const currAvatar = user?.avatar;
+    setUser({ ...user, avatar: url });
     try {
       setOpen(false);
       const res = await fetch("/api/update-avatar", {
@@ -50,7 +50,7 @@ const AvatarSelector = ({ className }) => {
       if (data.success) {
         toast.success(data.message, { autoClose: 1000 });
       } else {
-        setAvatar(currAvatar);
+        setUser({ ...user, avatar: currAvatar });
         toast.error(data.message);
       }
     } catch (error) {
