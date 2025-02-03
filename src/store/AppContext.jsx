@@ -1,6 +1,7 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { createContext, useEffect, useState } from "react";
+import LoaderFullPage from "@/components/custom/LoaderFullPage";
 export const AppContext = createContext({
   dark: true,
   setDark: () => {},
@@ -29,9 +30,12 @@ const ContextProvider = ({ children }) => {
   const [password, setPassword] = useState("");
   const [notes, setNotes] = useState([]);
 
+  const [waiting, setWaiting] = useState(true);
+
   useEffect(() => {
     if (status === "authenticated") {
       (async () => {
+        setWaiting(true);
         try {
           const response = await fetch("/api/fetch-user-data");
           const data = await response.json();
@@ -44,9 +48,10 @@ const ContextProvider = ({ children }) => {
           }
         } catch (error) {
           console.error(error);
+        } finally {
+          setWaiting(false);
         }
       })();
-      console.log({ username, avatar, email, password, notes });
     }
   }, [status]);
 
@@ -69,6 +74,7 @@ const ContextProvider = ({ children }) => {
         setNotes,
       }}
     >
+      {waiting && <LoaderFullPage />}
       {children}
     </AppContext.Provider>
   );

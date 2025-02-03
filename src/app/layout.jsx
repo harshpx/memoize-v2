@@ -10,11 +10,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <AuthProvider>
-        <ContextProvider>
-          <body className="font-poppins antialiased dark">{children}</body>
-        </ContextProvider>
-      </AuthProvider>
+      <body className="font-poppins antialiased dark">
+        <AuthProvider>
+          <ContextProvider>{children}</ContextProvider>
+        </AuthProvider>
+      </body>
     </html>
   );
 }
