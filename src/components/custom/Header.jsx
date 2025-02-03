@@ -21,13 +21,19 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Pencil, X, NotepadText, ListTodo } from "lucide-react";
 import Image from "next/image";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { useContext } from "react";
 import { AppContext } from "@/store/AppContext";
+import AvatarSelector from "@/components/custom/AvatarSelector";
 
 const Header = ({ children }) => {
   const { data } = useSession();
@@ -84,7 +90,7 @@ const Header = ({ children }) => {
                   width={isSmallScreen ? 150 : 200}
                   height={isSmallScreen ? 150 : 200}
                 />
-                <Pencil className="-mt-8 bg-black w-10 h-8 p-1 sm:w-14 sm:h-10 sm:p-2 border-2 border-white rounded-full" />
+                <AvatarSelector className="-mt-8"/>
               </div>
               <SheetHeader className="w-full">
                 <SheetTitle className="text-3xl font-[500] text-center">{`Hi ${data?.user?.username}!`}</SheetTitle>
@@ -138,7 +144,7 @@ const Header = ({ children }) => {
                   width={isSmallScreen ? 150 : 200}
                   height={isSmallScreen ? 150 : 200}
                 />
-                <Pencil className="-mt-7 bg-black w-10 h-8 p-1 sm:w-14 sm:h-10 sm:p-2 border-2 border-white rounded-full" />
+                <AvatarSelector className="-mt-7"/>
               </div>
               <DrawerHeader className="w-full">
                 <DrawerTitle className="text-3xl font-[500] text-center">{`Hi ${data?.user?.username}!`}</DrawerTitle>

@@ -15,24 +15,38 @@ export const authOptions = {
       async authorize(credentials) {
         try {
           await connectToDatabase();
-          const user = await User.findOne({
-            $or: [
-              { email: credentials.identifier },
-              { username: credentials.identifier },
-            ],
+          const userByEmail = await User.findOne({
+            email: credentials.identifier,
           });
-          if (!user) {
-            throw new Error("No user found, please signup");
-          }
-          const isCorrectPassword = await compare(
-            credentials.password,
-            user.password
-          );
-          if (isCorrectPassword) {
-            return user;
+          if (userByEmail) {
+            const isCorrectPassword = await compare(
+              credentials.password,
+              userByEmail.password
+            );
+            if (isCorrectPassword) {
+              return userByEmail;
+            } else {
+              throw new Error("Incorrect password");
+            }
           } else {
-            throw new Error("Incorrect password");
+            const userByUsername = await User.findOne({
+              username: credentials.identifier,
+            });
+            if (userByUsername) {
+              const isCorrectPassword = await compare(
+                credentials.password,
+                userByUsername.password
+              );
+              if (isCorrectPassword) {
+                return userByUsername;
+              } else {
+                throw new Error("Incorrect password");
+              }
+            } else {
+              throw new Error("User not found");
+            }
           }
+          
         } catch (error) {
           throw new Error(error.message);
         }
@@ -43,12 +57,12 @@ export const authOptions = {
     strategy: "jwt",
   },
   callbacks: {
-    async jwt({token, user}) {
+    async jwt({ token, user }) {
       if (user) token._id = user._id;
       return token;
     },
-    async session({session, token}) {
-      if(token){
+    async session({ session, token }) {
+      if (token) {
         const fetchUser = await User.findById(token._id);
         session.user = {
           _id: fetchUser._id,
@@ -56,7 +70,7 @@ export const authOptions = {
           email: fetchUser.email,
           avatar: fetchUser.avatar,
           notes: fetchUser.notes,
-        }
+        };
       }
       return session;
     },

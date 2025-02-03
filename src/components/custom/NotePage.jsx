@@ -1,7 +1,9 @@
+import AvatarSelector from "./AvatarSelector";
 
 const NotePage = () => {
   return (
-    <div className="w-full my-5 text-center">Notes will be available soon!</div>
+    <div className="w-full my-5 text-center">Notes will be available soon!
+    </div>
   )
 }
 
