@@ -1,15 +1,10 @@
 import Image from "next/image";
 import avatar from "animal-avatar-generator";
 import { Pencil } from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
+import { AppContext } from "@/store/AppContext";
 
 const avatarOptions = [
   `data:image/svg+xml;base64,${btoa(avatar("harsh", { size: 400 }))}`,
@@ -29,22 +24,28 @@ const avatarOptions = [
 const AvatarSelector = ({ className }) => {
   const [open, setOpen] = useState(false);
   const isSmallScreen = useMediaQuery("(max-width: 1024px)");
-  const { data, update } = useSession();
+  const {avatar, setAvatar} = useContext(AppContext);
 
   const updateAvatar = async (url) => {
-    const res = await fetch("/api/update-avatar", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ avatar: url }),
-    });
-    const data = await res.json();
-    if (data.success) {
-      await update(data.updatedSession);
-      toast.success(data.message,{autoClose: 1000});
-    } else {
-      toast.error(data.message);
+    const currAvatar = avatar;
+    setAvatar(url);
+    try {
+      const res = await fetch("/api/update-avatar", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ avatar: url }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success(data.message,{autoClose: 1000});
+      } else {
+        setAvatar(currAvatar);
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error("Something went wrong");
     }
   }
 
@@ -62,17 +63,17 @@ const AvatarSelector = ({ className }) => {
         <div
           className={`px-6 grid grid-cols-4 gap-3 items-center justify-center `}
         >
-          {avatarOptions.map((avatar, index) => (
+          {avatarOptions.map((item, index) => (
             <Image
               key={index}
-              src={avatar}
+              src={item}
               alt="avatar"
               width={isSmallScreen ? 70 : 80}
               height={isSmallScreen ? 70 : 80}
               className={`rounded-full cursor-pointer ${
-                avatar === data?.user?.avatar ? "border-2 border-white p-0.5" : "hover:border-2 hover:border-neutral-500 p-0.5 transition-all duration-100"
+                item === avatar ? "border-2 border-white p-0.5" : "hover:border-2 hover:border-neutral-500 p-0.5 transition-all duration-100"
               }`}
-              onClick={() => updateAvatar(avatar)}
+              onClick={() => updateAvatar(item)}
             />
           ))}
         </div>

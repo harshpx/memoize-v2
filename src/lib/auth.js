@@ -15,37 +15,23 @@ export const authOptions = {
       async authorize(credentials) {
         try {
           await connectToDatabase();
-          const userByEmail = await User.findOne({
-            email: credentials.identifier,
+          const user = await User.findOne({
+            $or: [
+              { email: credentials.identifier },
+              { username: credentials.identifier },
+            ],
           });
-          if (userByEmail) {
-            const isCorrectPassword = await compare(
-              credentials.password,
-              userByEmail.password
-            );
-            if (isCorrectPassword) {
-              return userByEmail;
-            } else {
-              throw new Error("Incorrect password");
-            }
-          } else {
-            const userByUsername = await User.findOne({
-              username: credentials.identifier,
-            });
-            if (userByUsername) {
-              const isCorrectPassword = await compare(
-                credentials.password,
-                userByUsername.password
-              );
-              if (isCorrectPassword) {
-                return userByUsername;
-              } else {
-                throw new Error("Incorrect password");
-              }
-            } else {
-              throw new Error("User not found");
-            }
+          if (!user) {
+            throw new Error("User not found");
           }
+          const isCorrectPassword = await compare(
+            credentials.password,
+            user.password
+          );
+          if (!isCorrectPassword) {
+            throw new Error("Incorrect password");
+          }
+          return user;
           
         } catch (error) {
           throw new Error(error.message);
@@ -63,14 +49,7 @@ export const authOptions = {
     },
     async session({ session, token }) {
       if (token) {
-        const fetchUser = await User.findById(token._id);
-        session.user = {
-          _id: fetchUser._id,
-          username: fetchUser.username,
-          email: fetchUser.email,
-          avatar: fetchUser.avatar,
-          notes: fetchUser.notes,
-        };
+        session.user = { _id: token._id };
       }
       return session;
     },

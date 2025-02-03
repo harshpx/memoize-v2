@@ -6,7 +6,7 @@ import { authOptions } from "@/lib/auth";
 export const PUT = async (req) => {
   try {
     const session = await getServerSession(authOptions);
-    if (!session || !session?.user || !session?.user?.email) {
+    if (!session || !session?.user) {
       return Response.json(
         {
           sussess: false,
@@ -32,25 +32,25 @@ export const PUT = async (req) => {
     }
 
     await connectToDatabase();
-    const updatedUser = await User.findOneAndUpdate(
-      { email: session.user.email },
+    const updatedUser = await User.findByIdAndUpdate(
+      session.user._id,
       { avatar },
       { new: true }
     );
 
     if (updatedUser) {
-      const updatedSession = {
-        ...session,
-        user: {
-          ...session.user,
-          avatar: updatedUser.avatar,
-        },
-      };
+      // const updatedSession = {
+      //   ...session,
+      //   user: {
+      //     ...session.user,
+      //     avatar: updatedUser.avatar,
+      //   },
+      // };
       return Response.json(
         {
           success: true,
           message: "Avatar updated successfully",
-          updatedSession,
+          // updatedSession,
         },
         {
           status: 200,

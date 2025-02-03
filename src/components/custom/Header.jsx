@@ -36,8 +36,7 @@ import { AppContext } from "@/store/AppContext";
 import AvatarSelector from "@/components/custom/AvatarSelector";
 
 const Header = ({ children }) => {
-  const { data } = useSession();
-  const { page, setPage } = useContext(AppContext);
+  const { username, avatar, email, page, setPage } = useContext(AppContext);
 
   const signoutHandler = () => {
     signOut();
@@ -77,15 +76,15 @@ const Header = ({ children }) => {
           <Sheet className="border">
             <SheetTrigger className="flex gap-2 items-center">
               <Avatar>
-                <AvatarImage src={data?.user?.avatar} />
+                <AvatarImage src={avatar} />
                 <AvatarFallback>DP</AvatarFallback>
               </Avatar>
-              <div className="text-nowrap">{`hi ${data?.user?.username}!`}</div>
+              <div className="text-nowrap">{`hi ${username}!`}</div>
             </SheetTrigger>
             <SheetContent>
               <div className="w-full mt-5 sm:mt-12 mb-5 flex flex-col gap-2 items-center">
                 <Image
-                  src={data?.user?.avatar}
+                  src={avatar}
                   alt="avatar"
                   width={isSmallScreen ? 150 : 200}
                   height={isSmallScreen ? 150 : 200}
@@ -93,7 +92,7 @@ const Header = ({ children }) => {
                 <AvatarSelector className="-mt-8"/>
               </div>
               <SheetHeader className="w-full">
-                <SheetTitle className="text-3xl font-[500] text-center">{`Hi ${data?.user?.username}!`}</SheetTitle>
+                <SheetTitle className="text-3xl font-[500] text-center">{`Hi ${username}!`}</SheetTitle>
                 <SheetDescription className="text-center">{`Welcome to Memoize`}</SheetDescription>
               </SheetHeader>
               <div className="w-full my-4 flex justify-center">
@@ -104,7 +103,7 @@ const Header = ({ children }) => {
             </SheetContent>
           </Sheet>
         ) : (
-          <div className="text-nowrap">{`hi ${data?.user?.username}!`}</div>
+          <div className="text-nowrap">{`hi ${username}!`}</div>
         )}
       </div>
       <div className="w-full flex-1 bg-neutral-800">{children}</div>
@@ -132,14 +131,14 @@ const Header = ({ children }) => {
           <Drawer>
             <DrawerTrigger>
               <Avatar className="w-11 h-11 border-2 active:border-white">
-                <AvatarImage src={data?.user?.avatar} />
+                <AvatarImage src={avatar} />
                 <AvatarFallback>DP</AvatarFallback>
               </Avatar>
             </DrawerTrigger>
             <DrawerContent className="">
               <div className="w-full mt-10 sm:mt-12 mb-2 flex flex-col gap-2 items-center">
                 <Image
-                  src={data?.user?.avatar}
+                  src={avatar}
                   alt="avatar"
                   width={isSmallScreen ? 150 : 200}
                   height={isSmallScreen ? 150 : 200}
@@ -147,7 +146,7 @@ const Header = ({ children }) => {
                 <AvatarSelector className="-mt-7"/>
               </div>
               <DrawerHeader className="w-full">
-                <DrawerTitle className="text-3xl font-[500] text-center">{`Hi ${data?.user?.username}!`}</DrawerTitle>
+                <DrawerTitle className="text-3xl font-[500] text-center">{`Hi ${username}!`}</DrawerTitle>
                 <DrawerDescription className="text-center">{`Welcome to Memoize`}</DrawerDescription>
               </DrawerHeader>
               <div className="w-full my-4 flex justify-center">
