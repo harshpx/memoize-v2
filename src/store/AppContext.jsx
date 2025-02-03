@@ -33,26 +33,24 @@ const ContextProvider = ({ children }) => {
   const [waiting, setWaiting] = useState(true);
 
   useEffect(() => {
-    if (status === "authenticated") {
-      (async () => {
+    (async () => {
+      try {
         setWaiting(true);
-        try {
-          const response = await fetch("/api/fetch-user-data");
-          const data = await response.json();
-          if (data.success) {
-            setUsername(data.user.username);
-            setAvatar(data.user.avatar);
-            setEmail(data.user.email);
-            setPassword(data.user.password);
-            setNotes(data.user.notes);
-          }
-        } catch (error) {
-          console.error(error);
-        } finally {
-          setWaiting(false);
+        const response = await fetch("/api/fetch-user-data");
+        const data = await response.json();
+        if (data.success) {
+          setUsername(data.user.username);
+          setAvatar(data.user.avatar);
+          setEmail(data.user.email);
+          setPassword(data.user.password);
+          setNotes(data.user.notes);
         }
-      })();
-    }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setWaiting(false);
+      }
+    })();
   }, [status]);
 
   return (
