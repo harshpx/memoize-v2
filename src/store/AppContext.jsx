@@ -29,7 +29,6 @@ const ContextProvider = ({ children }) => {
           const data = await response.json();
           if (data.success) {
             setUser(data.user);
-            console.log(data.user);
           } else {
             signOut();
           }

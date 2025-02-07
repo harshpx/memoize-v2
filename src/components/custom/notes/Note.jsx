@@ -189,7 +189,7 @@ const Note = ({ note }) => {
         </div>
       </DialogTrigger>
       <DialogContent
-        className="w-[90%] sm:w-[450px] rounded-2xl border-2 h-[70%] border-neutral-500"
+        className="w-[95%] sm:w-[450px] rounded-2xl border-2 h-[500px] border-neutral-500"
         style={{ backgroundColor: color }}
       >
         <DialogHeader className="hidden">
@@ -210,7 +210,7 @@ const Note = ({ note }) => {
             className="focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none shadow-none border-none resize-none min-h-52 text-sm p-3.5 flex-1"
             placeholder="Take a note..."
           />
-          <div className="w-full mt-4 px-2 flex justify-between items-start">
+          <div className="w-full mt-4 flex gap-1 justify-evenly items-start">
             <Collapsible
               open={colorSelectorOpen}
               onOpenChange={setColorSelectorOpen}
