@@ -1,31 +1,20 @@
 import mongoose, { Schema } from "mongoose";
 import avatar from "animal-avatar-generator";
+import { object } from "zod";
 
-const NoteSchema = new Schema(
-  {
-    title: {
-      type: String,
-      required: false,
-    },
-    content: {
-      type: String,
-      required: false,
-    },
-    tags: {
-      type: [String],
-      default: [],
-    },
-    isArchived: {
-      type: Boolean,
-      default: false,
-    },
-    color: {
-      type: String,
-      default: "",
-    },
-  },
-  { timestamps: true }
-);
+// note's schema:
+// id: String
+// title: String
+// content: String
+// pinned: Boolean
+// color: String
+// updatedAt: Date
+
+// todo's schema:
+// id: String
+// title: String
+// completed: Boolean
+// updatedAt: Date
 
 const UserSchema = new Schema(
   {
@@ -50,7 +39,14 @@ const UserSchema = new Schema(
         avatar("harsh", { size: 400 })
       )}`,
     },
-    notes: [NoteSchema],
+    notes: {
+      type: [Object],
+      default: [],
+    },
+    todos: {
+      type: [Object],
+      default: [],
+    },
   },
   { timestamps: true }
 );

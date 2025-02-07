@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
-import Logo from "@/components/custom/Logo";
-import LoginForm from "@/components/custom/LoginForm";
-import SignupForm from "@/components/custom/SignupForm";
+import Logo from "@/components/custom/branding/Logo";
+import LoginForm from "@/components/custom/auth/LoginForm";
+import SignupForm from "@/components/custom/auth/SignupForm";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import {
   Card,
@@ -13,7 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Branding from "./Branding";
+import Branding from "../branding/Branding";
 
 const tabs = [
   {

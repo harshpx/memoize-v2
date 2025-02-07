@@ -1,7 +1,7 @@
 import connectToDatabase from "@/lib/db"
-export const GET = async(req) => {
+export const GET = async() => {
     try {
-        const db = await connectToDatabase();
+        await connectToDatabase();
         return Response.json (
             {
                 success: true,

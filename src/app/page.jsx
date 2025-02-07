@@ -1,7 +1,7 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { ToastContainer } from "react-toastify";
-import Register from "@/components/custom/Register";
+import Register from "@/components/custom/auth/Register";
 import Dashboard from "@/components/custom/Dashboard";
 import LoaderFullPage from "@/components/custom/LoaderFullPage";
 import useMediaQuery from "@/hooks/useMediaQuery";

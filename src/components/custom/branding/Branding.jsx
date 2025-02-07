@@ -2,7 +2,7 @@ import { Heart } from "lucide-react";
 
 const Branding = ({className}) => {
   return (
-    <div className={`text-neutral-400 flex items-center justify-center gap-2 ${className}`}>
+    <div className={`text-neutral-400 flex items-center justify-center gap-2 text-sm ${className}`}>
       <span>Made with</span>
       <Heart />
       <span>

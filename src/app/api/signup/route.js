@@ -44,6 +44,7 @@ export const POST = async (request) => {
       email,
       password: hashedPassword,
       notes: [],
+      todos: [],
     });
     await newUser.save();
 

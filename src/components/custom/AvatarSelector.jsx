@@ -5,6 +5,7 @@ import { useContext, useState } from "react";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { toast } from "react-toastify";
 import { AppContext } from "@/store/AppContext";
+import { avatars as avatarOptions } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
@@ -13,21 +14,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
-const avatarOptions = [
-  `data:image/svg+xml;base64,${btoa(avatar("harsh", { size: 400 }))}`,
-  `data:image/svg+xml;base64,${btoa(avatar("123", { size: 400 }))}`,
-  `data:image/svg+xml;base64,${btoa(avatar("1234", { size: 400 }))}`,
-  `data:image/svg+xml;base64,${btoa(avatar("12345", { size: 400 }))}`,
-  `data:image/svg+xml;base64,${btoa(avatar("123456", { size: 400 }))}`,
-  `data:image/svg+xml;base64,${btoa(avatar("1234567", { size: 400 }))}`,
-  `data:image/svg+xml;base64,${btoa(avatar("123456789", { size: 400 }))}`,
-  `data:image/svg+xml;base64,${btoa(avatar("1234567890", { size: 400 }))}`,
-  `data:image/svg+xml;base64,${btoa(avatar("12345678901", { size: 400 }))}`,
-  `data:image/svg+xml;base64,${btoa(avatar("123456789012", { size: 400 }))}`,
-  `data:image/svg+xml;base64,${btoa(avatar("12345678901234", { size: 400 }))}`,
-  `data:image/svg+xml;base64,${btoa(avatar("123456789012345", { size: 400 }))}`,
-];
 
 const AvatarSelector = ({ className }) => {
   const [open, setOpen] = useState(false);
@@ -48,12 +34,13 @@ const AvatarSelector = ({ className }) => {
       });
       const data = await res.json();
       if (data.success) {
-        toast.success(data.message, { autoClose: 1000 });
+        toast.success(data.message, { autoClose: 700 });
       } else {
         setUser({ ...user, avatar: currAvatar });
         toast.error(data.message);
       }
     } catch (error) {
+      setUser({ ...user, avatar: currAvatar });
       toast.error("Something went wrong");
     }
   };
@@ -66,7 +53,7 @@ const AvatarSelector = ({ className }) => {
           className={`bg-black w-10 h-8 p-1 sm:w-14 sm:h-10 sm:p-2 border-2 border-white rounded-full cursor-pointer ${className}`}
         />
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="w-[90%] sm:w-fit rounded-xl">
         <DialogHeader>
           <DialogTitle>Choose your Avatar</DialogTitle>
           <DialogDescription>

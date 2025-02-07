@@ -1,7 +1,8 @@
 "use client";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { createContext, useEffect, useState } from "react";
 import LoaderFullPage from "@/components/custom/LoaderFullPage";
+
 export const AppContext = createContext({
   dark: true,
   setDark: () => {},
@@ -28,9 +29,13 @@ const ContextProvider = ({ children }) => {
           const data = await response.json();
           if (data.success) {
             setUser(data.user);
+            console.log(data.user);
+          } else {
+            signOut();
           }
         } catch (error) {
           console.error(error);
+          signOut();
         } finally {
           setWaiting(false);
         }

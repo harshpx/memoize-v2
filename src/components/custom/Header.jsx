@@ -2,7 +2,7 @@
 import { signOut } from "next-auth/react";
 import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
-import Logo from "@/components/custom/Logo";
+import Logo from "@/components/custom/branding/Logo";
 import {
   Sheet,
   SheetContent,
@@ -28,7 +28,7 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 import { useContext } from "react";
 import { AppContext } from "@/store/AppContext";
 import AvatarSelector from "@/components/custom/AvatarSelector";
-import Branding from "./Branding";
+import Branding from "./branding/Branding";
 
 const Header = ({ children }) => {
   const { user, page, setPage } = useContext(AppContext);

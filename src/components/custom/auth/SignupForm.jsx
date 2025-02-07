@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import useDebounce from "@/hooks/useDebounce";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
-import LoaderFullPage from "./LoaderFullPage";
+import LoaderFullPage from "../LoaderFullPage";
 import { toast } from "react-toastify";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";

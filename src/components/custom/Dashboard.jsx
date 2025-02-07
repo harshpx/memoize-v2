@@ -1,8 +1,8 @@
 import Header from "@/components/custom/Header";
 import { useContext } from "react";
 import { AppContext } from "@/store/AppContext";
-import NotePage from "@/components/custom/NotePage";
-import TodoPage from "@/components/custom/TodoPage";
+import NotePage from "@/components/custom/notes/NotePage";
+import TodoPage from "@/components/custom/todos/TodoPage";
 
 const Dashboard = () => {
   const { page } = useContext(AppContext);
