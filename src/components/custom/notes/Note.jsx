@@ -13,7 +13,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { Palette, Pin, PinOff, Trash } from "lucide-react";
+import { Palette, Pin, PinOff, Trash, Save } from "lucide-react";
 import { colors } from "@/lib/utils";
 import { toast } from "react-toastify";
 import { AppContext } from "@/store/AppContext";
@@ -150,6 +150,11 @@ const Note = ({ note }) => {
     }
   };
 
+  const saveButtonHandler = () => {
+    dialogCloseTrigger();
+    setDialogOpen(false);
+  };
+
   return (
     <Dialog
       open={dialogOpen}
@@ -175,7 +180,7 @@ const Note = ({ note }) => {
         </div>
       </DialogTrigger>
       <DialogContent
-        className="w-[95%] sm:w-[450px] rounded-2xl border-2 h-[500px] border-neutral-500"
+        className="w-full sm:w-[450px] rounded-none sm:rounded-2xl h-full sm:h-[500px] border-0 sm:border-2 border-neutral-500"
         style={{ backgroundColor: color }}
       >
         <DialogHeader className="hidden">
@@ -196,7 +201,7 @@ const Note = ({ note }) => {
             className="focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none shadow-none border-none resize-none min-h-52 text-sm p-3.5 flex-1"
             placeholder="Take a note..."
           />
-          <div className="w-full mt-4 flex gap-1 justify-evenly items-start">
+          <div className="w-full mt-4 text-sm sm:text-md flex gap-1 justify-evenly items-start">
             <Collapsible
               open={colorSelectorOpen}
               onOpenChange={setColorSelectorOpen}
@@ -204,9 +209,9 @@ const Note = ({ note }) => {
               ref={colorSelectorRef}
             >
               <CollapsibleTrigger>
-                <div className="flex items-center p-2 border-2 border-neutral-300 hover:bg-neutral-100 hover:bg-opacity-20 active:bg-opacity-20 rounded-full">
+                <div className="flex items-center p-1 sm:p-2 border-2 border-neutral-300 hover:bg-neutral-100 hover:bg-opacity-20 active:bg-opacity-20 rounded-2xl">
                   <div className="flex items-center gap-1">
-                    <Palette size={24} />
+                    <Palette size={20} />
                     <span>Colors</span>
                   </div>
                 </div>
@@ -227,7 +232,7 @@ const Note = ({ note }) => {
               </CollapsibleContent>
             </Collapsible>
             <div
-              className="flex items-center p-2 cursor-pointer border-2 border-neutral-300 hover:bg-neutral-100 hover:bg-opacity-20 active:bg-opacity-20 rounded-full"
+              className="flex items-center p-1 sm:p-2 cursor-pointer border-2 border-neutral-300 hover:bg-neutral-100 hover:bg-opacity-20 active:bg-opacity-20 rounded-2xl"
               onClick={() => setPinned(!pinned)}
             >
               {pinned ? (
@@ -244,11 +249,20 @@ const Note = ({ note }) => {
             </div>
             <div
               onClick={deleteNoteTrigger}
-              className="flex items-center p-2 cursor-pointer border-2 border-neutral-300 hover:bg-neutral-100 hover:bg-opacity-20 active:bg-opacity-20 rounded-full"
+              className="flex items-center p-1 sm:p-2 cursor-pointer border-2 border-neutral-300 hover:bg-neutral-100 hover:bg-opacity-20 active:bg-opacity-20 rounded-2xl"
             >
               <div className="flex items-center gap-1">
                 <Trash size={20} className="-mt-0.5" />
                 <span>Delete</span>
+              </div>
+            </div>
+            <div
+              className="flex items-center p-1 sm:p-2 cursor-pointer border-2 border-neutral-300 hover:bg-neutral-100 hover:bg-opacity-20 active:bg-opacity-20 rounded-2xl"
+              onClick={saveButtonHandler}
+            >
+              <div className="flex items-center gap-1">
+                <Save size={20} className="-mt-0.5" />
+                <span>Save</span>
               </div>
             </div>
           </div>
