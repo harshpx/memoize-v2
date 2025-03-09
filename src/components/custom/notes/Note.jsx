@@ -195,6 +195,7 @@ const Note = ({ note }) => {
             placeholder="Title"
             className="focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none shadow-none border-none text-2xl md:text-2xl h-12"
           />
+          {/* <div className=" h-[1px] mt-4 mx-3 rounded-full bg-current opacity-30 mix-blend-difference"></div> */}
           <Textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
