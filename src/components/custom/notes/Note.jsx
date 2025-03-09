@@ -193,12 +193,12 @@ const Note = ({ note }) => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Title"
-            className="focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none shadow-none border-none text-xl md:text-xl h-12"
+            className="focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none shadow-none border-none text-2xl md:text-2xl h-12"
           />
           <Textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none shadow-none border-none resize-none min-h-52 text-sm p-3.5 flex-1"
+            className="focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none shadow-none border-none resize-none min-h-52 text-[16px] p-3.5 flex-1"
             placeholder="Take a note..."
           />
           <div className="w-full mt-4 text-sm sm:text-md flex gap-1 justify-evenly items-start">
