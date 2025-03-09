@@ -13,26 +13,33 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import useDebounce from "@/hooks/useDebounce";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import LoaderFullPage from "../LoaderFullPage";
 import { toast } from "react-toastify";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import {
+  checkEmailAvailability,
+  checkUsernameAvailability,
+  registerUser,
+} from "@/lib/features";
+import { AppContext } from "@/store/AppContext";
+import { setCookie } from "@/lib/utils";
 
 const SignupForm = () => {
   const [inputUsername, setInputUsername] = useState("");
   const [isCheckingUsername, setIsCheckingUsername] = useState(false);
   const [usernameMessage, setUsernameMessage] = useState("");
+
   const [inputEmail, setInputEmail] = useState("");
   const [isCheckingEmail, setIsCheckingEmail] = useState(false);
   const [emailMessage, setEmailMessage] = useState("");
+
   const [waiting, setWaiting] = useState(false);
 
   const debouncedUsername = useDebounce(inputUsername, 500);
   const debouncedEmail = useDebounce(inputEmail, 500);
 
-  const router = useRouter();
+  const { setUser, setAuthenticated } = useContext(AppContext);
 
   useEffect(() => {
     // available username check api
@@ -41,13 +48,8 @@ const SignupForm = () => {
         setIsCheckingUsername(true);
         setUsernameMessage("");
         try {
-          const response = await fetch(
-            `/api/check-unique-username?username=${encodeURIComponent(
-              debouncedUsername
-            )}`
-          );
-          const data = await response.json();
-          setUsernameMessage(data.message);
+          const response = await checkUsernameAvailability(debouncedUsername);
+          setUsernameMessage(response.message);
         } catch (error) {
           setUsernameMessage("Error checking username");
         } finally {
@@ -64,13 +66,8 @@ const SignupForm = () => {
         setIsCheckingEmail(true);
         setEmailMessage("");
         try {
-          const response = await fetch(
-            `/api/check-unique-email?email=${encodeURIComponent(
-              debouncedEmail
-            )}`
-          );
-          const data = await response.json();
-          setEmailMessage(data.message);
+          const response = await checkEmailAvailability(debouncedEmail);
+          setEmailMessage(response.message);
         } catch (error) {
           setEmailMessage("Error checking email");
         } finally {
@@ -110,38 +107,20 @@ const SignupForm = () => {
       email: data.email,
       password: data.password,
     };
-    setWaiting(true);
 
     try {
-      const response = await fetch("/api/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      const onSignupResponse = await response.json();
-
+      setWaiting(true);
+      const onSignupResponse = await registerUser(payload);
       if (onSignupResponse.success) {
-        toast.success(onSignupResponse.message,{autoClose: 1000});
-        formController.reset();
-        setUsernameMessage("");
-        setEmailMessage("");
-
-        const trySignIn = await signIn("credentials", {
-          identifier: data.username,
-          password: data.password,
-          redirect: false,
-        });
-
-        if (trySignIn.error) {
-          toast.warning(
-            "Signup success, but failed to login. Please login manually"
-          );
-        }
+        formController.reset(); // reset form
+        setUsernameMessage(""); // reset username message
+        setEmailMessage(""); // reset email message
+        setCookie("token", onSignupResponse?.token); // set token in cookie
+        setUser(onSignupResponse?.user); // set user in context
+        setAuthenticated(true); // set authenticated in context
+        toast.success(onSignupResponse?.message, { autoClose: 1000 }); // show success message
       } else {
-        toast.error(onSignupResponse.message);
+        toast.error(onSignupResponse?.message);
       }
     } catch (error) {
       toast.error("Unable to send signup request");

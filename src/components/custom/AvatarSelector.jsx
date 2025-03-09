@@ -14,30 +14,24 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { updateAvatar } from "@/lib/features";
 
 const AvatarSelector = ({ className }) => {
   const [open, setOpen] = useState(false);
   const isSmallScreen = useMediaQuery("(max-width: 1024px)");
   const { user, setUser } = useContext(AppContext);
 
-  const updateAvatar = async (url) => {
-    const currAvatar = user?.avatar;
+  const updateAvatarHandler = async (url) => {
+    const currAvatar = user.avatar;
     setUser({ ...user, avatar: url });
     try {
       setOpen(false);
-      const res = await fetch("/api/update-avatar", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ avatar: url }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        toast.success(data.message, { autoClose: 700 });
+      const response = await updateAvatar({ avatar: url });
+      if (response.success) {
+        toast.success(response.message, { autoClose: 700 });
       } else {
         setUser({ ...user, avatar: currAvatar });
-        toast.error(data.message);
+        toast.error(response.message);
       }
     } catch (error) {
       setUser({ ...user, avatar: currAvatar });
@@ -75,7 +69,7 @@ const AvatarSelector = ({ className }) => {
                   ? "border-2 border-white p-0.5"
                   : "hover:border-2 hover:border-neutral-500 p-0.5 transition-all duration-100"
               }`}
-              onClick={() => updateAvatar(item)}
+              onClick={() => updateAvatarHandler(item)}
             />
           ))}
         </div>

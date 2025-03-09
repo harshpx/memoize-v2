@@ -1,22 +1,17 @@
 "use client";
-import { useSession } from "next-auth/react";
 import { ToastContainer } from "react-toastify";
 import Register from "@/components/custom/auth/Register";
 import Dashboard from "@/components/custom/Dashboard";
-import LoaderFullPage from "@/components/custom/LoaderFullPage";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import { useContext } from "react";
+import { AppContext } from "@/store/AppContext";
 const Home = () => {
-  const { status } = useSession();
+  // const { status } = useSession();
+  const { authenticated } = useContext(AppContext);
   const isMobile = useMediaQuery("(max-width: 640px)");
   return (
     <div>
-      {status === "loading" ? (
-        <LoaderFullPage />
-      ) : status === "authenticated" ? (
-        <Dashboard />
-      ) : (
-        <Register />
-      )}
+      {authenticated ? <Dashboard /> : <Register />}
       <ToastContainer
         position={isMobile ? "top-left" : "bottom-center"}
         autoClose={2500}

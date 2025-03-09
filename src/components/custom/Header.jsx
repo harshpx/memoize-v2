@@ -1,5 +1,4 @@
 "use client";
-import { signOut } from "next-auth/react";
 import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/custom/branding/Logo";
@@ -29,12 +28,14 @@ import { useContext } from "react";
 import { AppContext } from "@/store/AppContext";
 import AvatarSelector from "@/components/custom/AvatarSelector";
 import Branding from "./branding/Branding";
+import { deleteCookie } from "@/lib/utils";
 
 const Header = ({ children }) => {
-  const { user, page, setPage } = useContext(AppContext);
+  const { user, page, setPage, setAuthenticated } = useContext(AppContext);
 
   const signoutHandler = () => {
-    signOut();
+    deleteCookie("token");
+    setAuthenticated(false);
     toast.success("Logged out successfully");
   };
 

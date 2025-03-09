@@ -1,5 +1,4 @@
 "use client";
-import { signIn } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import loginSchema from "@/validationSchemas/loginSchema";
@@ -15,9 +14,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-toastify";
 import LoaderFullPage from "@/components/custom/LoaderFullPage";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { loginUser } from "@/lib/features";
+import { setCookie } from "@/lib/utils";
+import { AppContext } from "@/store/AppContext";
 
 const LoginForm = () => {
+  const { setUser, setAuthenticated } = useContext(AppContext);
   const [waiting, setWaiting] = useState(false);
 
   const formController = useForm({
@@ -37,15 +40,15 @@ const LoginForm = () => {
     };
     setWaiting(true);
     try {
-      const res = await signIn("credentials", {
-        ...payload,
-        redirect: false,
-      });
+      const res = await loginUser(payload);
 
-      if (res.error) {
-        toast.error("Login failed, Invalid credentials");
+      if (res.success) {
+        setCookie("token", res.token);
+        setUser(res.user);
+        setAuthenticated(true);
+        toast.success(res?.message, { autoClose: 1000 });
       } else {
-        toast.success("Login successful", { autoClose: 1000 });
+        toast.error(res?.message);
       }
     } catch (error) {
       toast.error("Unexpected error occurred");

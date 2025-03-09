@@ -13,32 +13,28 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import {
-  Palette,
-  Pin,
-  PinOff,
-  ChevronUp,
-  ChevronDown,
-  Trash,
-} from "lucide-react";
+import { Palette, Pin, PinOff, Trash } from "lucide-react";
 import { colors } from "@/lib/utils";
 import { toast } from "react-toastify";
 import { AppContext } from "@/store/AppContext";
 import { useState, useContext, useEffect } from "react";
 import useOutsideClick from "@/hooks/useOutsideClick";
+import { deleteNote, updateNote } from "@/lib/features";
 
 const Note = ({ note }) => {
   const [title, setTitle] = useState(note?.title);
   const [content, setContent] = useState(note?.content);
   const [pinned, setPinned] = useState(note?.pinned);
   const [color, setColor] = useState(note?.color);
+  const [status, setStatus] = useState(note?.status);
 
   const [colorSelectorOpen, setColorSelectorOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const { user, setUser } = useContext(AppContext);
 
-  const { ref:colorSelectorRef, isOutsideClick:isClickOutsideColorSelector } = useOutsideClick();
+  const { ref: colorSelectorRef, isOutsideClick: isClickOutsideColorSelector } =
+    useOutsideClick();
 
   useEffect(() => {
     if (!colorSelectorOpen) return; // Don't run effect unless open
@@ -58,17 +54,21 @@ const Note = ({ note }) => {
 
     // update note api call
     const prevNote = note;
+    const prevNotes = user.notes;
+
     const newData = {
       title: title.trim(),
       content: content.trim(),
       color,
       pinned,
+      status,
     };
     if (
       prevNote.title === newData.title &&
       prevNote.content === newData.content &&
       prevNote.color === newData.color &&
-      prevNote.pinned === newData.pinned
+      prevNote.pinned === newData.pinned &&
+      prevNote.status === newData.status
     ) {
       return;
     }
@@ -82,31 +82,26 @@ const Note = ({ note }) => {
               content: newData.content,
               color: newData.color,
               pinned: newData.pinned,
+              status: newData.status,
             }
           : item
       ),
     });
     try {
-      const response = await fetch("/api/notes", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "PUT",
-        body: JSON.stringify({
-          id: note.id,
-          title: newData.title,
-          content: newData.content,
-          color: newData.color,
-          pinned: newData.pinned,
-        }),
+      const response = await updateNote({
+        id: note.id,
+        ...newData,
       });
-      const res = await response.json();
-      if (!res.success) {
+      if (response.success) {
         setUser({
           ...user,
-          notes: user.notes.map((item) =>
-            item.id === note.id ? prevNote : item
-          ),
+          notes: response.notes,
+        });
+        toast.success(response.message);
+      } else {
+        setUser({
+          ...user,
+          notes: prevNotes,
         });
         setTitle(prevNote.title);
         setContent(prevNote.content);
@@ -117,9 +112,7 @@ const Note = ({ note }) => {
     } catch (error) {
       setUser({
         ...user,
-        notes: user.notes.map((item) =>
-          item.id === note.id ? prevNote : item
-        ),
+        notes: prevNotes,
       });
       setTitle(prevNote.title);
       setContent(prevNote.content);
@@ -130,39 +123,32 @@ const Note = ({ note }) => {
   };
 
   const deleteNoteTrigger = async () => {
-    const prevNote = note;
+    const prevNotes = user.notes;
+
     setUser({
       ...user,
       notes: user.notes.filter((item) => item.id !== note.id),
     });
+    setDialogOpen(false);
     try {
-      const response = await fetch("/api/notes", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "DELETE",
-        body: JSON.stringify({
-          id: note.id,
-        }),
-      });
-      const res = await response.json();
-      if(res.success){
-        setDialogOpen(false);
+      const response = await deleteNote({ id: note.id });
+      if (response.success) {
+        toast.success(response.message);
       } else {
         setUser({
           ...user,
-          notes: [...user.notes, prevNote],
+          notes: prevNotes,
         });
         toast.error(res.message);
       }
     } catch (error) {
       setUser({
         ...user,
-        notes: [...user.notes, prevNote],
+        notes: prevNotes,
       });
       toast.error("Failed to delete note");
     }
-  }
+  };
 
   return (
     <Dialog
@@ -244,13 +230,26 @@ const Note = ({ note }) => {
               className="flex items-center p-2 cursor-pointer border-2 border-neutral-300 hover:bg-neutral-100 hover:bg-opacity-20 active:bg-opacity-20 rounded-full"
               onClick={() => setPinned(!pinned)}
             >
-              {pinned ? <div className="flex items-center gap-1"><PinOff size={20} /><span>Unpin</span></div> : <div className="flex items-center gap-1"><Pin size={20} /><span>Pin</span></div>}
+              {pinned ? (
+                <div className="flex items-center gap-1">
+                  <PinOff size={20} />
+                  <span>Unpin</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-1">
+                  <Pin size={20} />
+                  <span>Pin</span>
+                </div>
+              )}
             </div>
             <div
               onClick={deleteNoteTrigger}
               className="flex items-center p-2 cursor-pointer border-2 border-neutral-300 hover:bg-neutral-100 hover:bg-opacity-20 active:bg-opacity-20 rounded-full"
             >
-              <div className="flex items-center gap-1"><Trash size={20} className="-mt-0.5" /><span>Delete</span></div>
+              <div className="flex items-center gap-1">
+                <Trash size={20} className="-mt-0.5" />
+                <span>Delete</span>
+              </div>
             </div>
           </div>
         </div>

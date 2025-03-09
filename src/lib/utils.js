@@ -1,6 +1,7 @@
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import avatar from "animal-avatar-generator";
+import Cookies from "js-cookie";
 
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
@@ -34,3 +35,15 @@ export const avatars = [
   `data:image/svg+xml;base64,${btoa(avatar("12345678901234", { size: 400 }))}`,
   `data:image/svg+xml;base64,${btoa(avatar("123456789012345", { size: 400 }))}`,
 ];
+
+export const setCookie = (name, value, days = 10) => {
+  Cookies.set(name, JSON.stringify(value), { expires: days });
+};
+
+export const getCookie = (name) => {
+  return Cookies.get(name) ? JSON.parse(Cookies.get(name)) : null;
+};
+
+export const deleteCookie = (name) => {
+  Cookies.remove(name);
+};

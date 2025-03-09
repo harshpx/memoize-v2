@@ -15,19 +15,12 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import {
-  Plus,
-  Palette,
-  Pin,
-  PinOff,
-  ChevronUp,
-  ChevronDown,
-  Trash,
-} from "lucide-react";
+import { Plus, Palette, Pin, PinOff } from "lucide-react";
 import { colors } from "@/lib/utils";
 import { toast } from "react-toastify";
 import { AppContext } from "@/store/AppContext";
 import useOutsideClick from "@/hooks/useOutsideClick";
+import { createNote } from "@/lib/features";
 
 const NoteInputBox = () => {
   const isMobile = useMediaQuery("(max-width: 640px)");
@@ -57,11 +50,20 @@ const NoteInputBox = () => {
   }, [colorSelectorOpen, isClickOutsideColorSelector]);
 
   const dialogCloseTrigger = async () => {
-    const data = {
+    const newNote = {
+      id:
+        "note-" +
+        Math.random().toString(36).substring(2) +
+        "-" +
+        Math.random().toString(36).substring(2) +
+        "-" +
+        Math.random().toString(36).substring(2),
       title: title.trim(),
       content: content.trim(),
       color,
       pinned,
+      status: "active",
+      updatedAt: new Date(),
     };
     setTitle("");
     setContent("");
@@ -69,26 +71,21 @@ const NoteInputBox = () => {
     setPinned(false);
     setColorSelectorOpen(false);
 
-    if (!data.title && !data.content) return;
+    if (!newNote.title && !newNote.content) return;
 
-    // create note api call
     const previousNotes = user.notes;
+    setUser({ ...user, notes: [...previousNotes, newNote] });
     try {
-      const response = await fetch("/api/notes", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      const res = await response.json();
-      if (res.success) {
-        setUser({ ...user, notes: [...previousNotes, res.note] });
+      const response = await createNote(newNote);
+      if (response.success) {
+        setUser({ ...user, notes: response.notes });
+        toast.success(response.message);
       } else {
+        setUser({ ...user, notes: previousNotes });
         toast.error(res.message);
       }
     } catch (error) {
+      setUser({ ...user, notes: previousNotes });
       toast.error("Something went wrong");
     }
   };
