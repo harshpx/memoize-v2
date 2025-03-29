@@ -65,7 +65,7 @@ const AvatarSelector = ({ className }) => {
               width={isSmallScreen ? 70 : 80}
               height={isSmallScreen ? 70 : 80}
               className={`rounded-full cursor-pointer ${
-                item === avatar
+                item === user.avatar
                   ? "border-2 border-white p-0.5"
                   : "hover:border-2 hover:border-neutral-500 p-0.5 transition-all duration-100"
               }`}

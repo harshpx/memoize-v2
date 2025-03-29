@@ -22,18 +22,18 @@ export const colors = [
 ];
 
 export const avatars = [
-  `data:image/svg+xml;base64,${btoa(avatar("harsh", { size: 400 }))}`,
-  `data:image/svg+xml;base64,${btoa(avatar("123", { size: 400 }))}`,
-  `data:image/svg+xml;base64,${btoa(avatar("1234", { size: 400 }))}`,
-  `data:image/svg+xml;base64,${btoa(avatar("12345", { size: 400 }))}`,
-  `data:image/svg+xml;base64,${btoa(avatar("123456", { size: 400 }))}`,
-  `data:image/svg+xml;base64,${btoa(avatar("1234567", { size: 400 }))}`,
-  `data:image/svg+xml;base64,${btoa(avatar("123456789", { size: 400 }))}`,
-  `data:image/svg+xml;base64,${btoa(avatar("1234567890", { size: 400 }))}`,
-  `data:image/svg+xml;base64,${btoa(avatar("12345678901", { size: 400 }))}`,
-  `data:image/svg+xml;base64,${btoa(avatar("123456789012", { size: 400 }))}`,
-  `data:image/svg+xml;base64,${btoa(avatar("12345678901234", { size: 400 }))}`,
-  `data:image/svg+xml;base64,${btoa(avatar("123456789012345", { size: 400 }))}`,
+  "https://i.imgur.com/8GO2mo5.png",
+  "https://i.imgur.com/DX92Le8.png",
+  "https://i.imgur.com/w6quc8D.png",
+  "https://i.imgur.com/5KFWFer.png",
+  "https://i.imgur.com/hZEkVPz.png",
+  "https://i.imgur.com/uaTcVQo.png",
+  "https://i.imgur.com/ZIPnYJU.png",
+  "https://i.imgur.com/994qIEz.png",
+  "https://i.imgur.com/xv7TdK9.png",
+  "https://i.imgur.com/jW7j7H9.png",
+  "https://i.imgur.com/Wx95aDx.png",
+  "https://i.imgur.com/yG2mnU5.png",
 ];
 
 export const setCookie = (name, value, days = 10) => {
