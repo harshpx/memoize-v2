@@ -73,7 +73,7 @@ const Header = ({ children }) => {
           <Sheet className="border">
             <SheetTrigger className="flex gap-2 items-center">
               <Avatar>
-                <AvatarImage src={user?.avatar} />
+                <AvatarImage src={user?.avatar?.url} />
                 <AvatarFallback>DP</AvatarFallback>
               </Avatar>
               <div className="text-nowrap">{`Hi ${user?.username}!`}</div>
@@ -82,7 +82,7 @@ const Header = ({ children }) => {
               <div>
                 <div className="w-full mt-5 sm:mt-12 mb-5 flex flex-col gap-2 items-center">
                   <Image
-                    src={user?.avatar}
+                    src={user?.avatar?.url}
                     alt="avatar"
                     width={isSmallScreen ? 150 : 200}
                     height={isSmallScreen ? 150 : 200}
@@ -107,7 +107,7 @@ const Header = ({ children }) => {
         )}
       </div>
       {/* children: Dashboard to be wrapped inside */}
-      <div className="w-full h-[calc(100vh-110px)] lg:h-[calc(100vh-60px)] bg-neutral-900">{children}</div>
+      <div className="w-full h-[calc(100vh-110px)] lg:h-[calc(100vh-60px)] bg-neutral-800">{children}</div>
       {/* footer (only for small screens) */}
       {isSmallScreen && (
         <div className="w-full h-[55px] px-4 flex justify-between items-center">
@@ -132,14 +132,14 @@ const Header = ({ children }) => {
           <Drawer>
             <DrawerTrigger>
               <Avatar className="w-11 h-11 border-2 active:border-white">
-                <AvatarImage src={user?.avatar} />
+                <AvatarImage src={user?.avatar?.url} />
                 <AvatarFallback>DP</AvatarFallback>
               </Avatar>
             </DrawerTrigger>
             <DrawerContent className="">
               <div className="w-full mt-10 sm:mt-12 mb-2 flex flex-col gap-2 items-center">
                 <Image
-                  src={user?.avatar}
+                  src={user?.avatar?.url}
                   alt="avatar"
                   width={isSmallScreen ? 150 : 200}
                   height={isSmallScreen ? 150 : 200}

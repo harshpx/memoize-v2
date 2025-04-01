@@ -167,7 +167,7 @@ const Note = ({ note }) => {
     >
       <DialogTrigger className="w-full mb-4">
         <div
-          className="w-full rounded-xl p-4 border-2 border-neutral-400 flex flex-col gap-4"
+          className="w-full rounded-xl p-4 flex flex-col gap-4 hover:scale-105 transition-all duration-200 ease-in-out cursor-pointer"
           style={{ backgroundColor: note?.color }}
         >
           <div className="w-full flex gap-4 items-start text-left ">
@@ -180,7 +180,7 @@ const Note = ({ note }) => {
         </div>
       </DialogTrigger>
       <DialogContent
-        className="w-full sm:w-[450px] rounded-none sm:rounded-2xl h-full sm:h-[500px] border-0 sm:border-2 border-neutral-500"
+        className="w-full sm:w-[450px] rounded-none sm:rounded-2xl h-full sm:h-[500px]"
         style={{ backgroundColor: color }}
       >
         <DialogHeader className="hidden">

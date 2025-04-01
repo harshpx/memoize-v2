@@ -23,12 +23,17 @@ const AvatarSelector = ({ className }) => {
 
   const updateAvatarHandler = async (url) => {
     const currAvatar = user.avatar;
-    setUser({ ...user, avatar: url });
+    const newAvatar = {
+      url,
+      updatedAt: new Date(),
+    }
+    setUser({ ...user, avatar: newAvatar });
     try {
       setOpen(false);
       const response = await updateAvatar({ avatar: url });
       if (response.success) {
         toast.success(response.message, { autoClose: 700 });
+        setUser({...user, avatar: response.avatar});
       } else {
         setUser({ ...user, avatar: currAvatar });
         toast.error(response.message);
