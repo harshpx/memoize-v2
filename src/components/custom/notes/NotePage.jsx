@@ -17,11 +17,13 @@ const NotePage = () => {
       <div className="flex justify-center w-full">
         <div className="w-full columns-2 md:columns-3 lg:columns-4 xl:columns-5">
           {user?.notes
+            ?.filter((note) => !note.deleted)
             ?.reverse()
             ?.map((note) =>
               note.pinned ? <Note key={note.id} note={note} /> : null
             )}
           {user?.notes
+            ?.filter((note) => !note.deleted)
             ?.reverse()
             ?.map((note) =>
               !note.pinned ? <Note key={note.id} note={note} /> : null

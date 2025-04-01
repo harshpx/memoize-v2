@@ -19,13 +19,14 @@ import { toast } from "react-toastify";
 import { AppContext } from "@/store/AppContext";
 import { useState, useContext, useEffect } from "react";
 import useOutsideClick from "@/hooks/useOutsideClick";
-import { deleteNote, updateNote } from "@/lib/features";
+import { deleteNote, syncNotes, updateNote } from "@/lib/features";
 
 const Note = ({ note }) => {
   const [title, setTitle] = useState(note?.title);
   const [content, setContent] = useState(note?.content);
   const [pinned, setPinned] = useState(note?.pinned);
   const [color, setColor] = useState(note?.color);
+  const [deleted, setDeleted] = useState(note?.deleted);
   const [status, setStatus] = useState(note?.status);
 
   const [colorSelectorOpen, setColorSelectorOpen] = useState(false);
@@ -62,6 +63,8 @@ const Note = ({ note }) => {
       color,
       pinned,
       status,
+      deleted,
+      updatedAt: new Date(),
     };
     if (
       prevNote.title === newData.title &&
@@ -72,26 +75,26 @@ const Note = ({ note }) => {
     ) {
       return;
     }
-    setUser({
-      ...user,
-      notes: user.notes.map((item) =>
-        item.id === note.id
-          ? {
-              ...item,
-              title: newData.title,
-              content: newData.content,
-              color: newData.color,
-              pinned: newData.pinned,
-              status: newData.status,
-            }
-          : item
-      ),
-    });
+    const updatedNotes = user.notes.map((item) =>
+      item.id === note.id
+        ? {
+            ...item,
+            title: newData.title,
+            content: newData.content,
+            color: newData.color,
+            pinned: newData.pinned,
+            status: newData.status,
+            updatedAt: newData.updatedAt,
+          }
+        : item
+    );
+    setUser({ ...user, notes: updatedNotes });
     try {
-      const response = await updateNote({
-        id: note.id,
-        ...newData,
-      });
+      // const response = await updateNote({
+      //   id: note.id,
+      //   ...newData,
+      // });
+      const response = await syncNotes(updatedNotes);
       if (response.success) {
         setUser({
           ...user,
@@ -125,14 +128,20 @@ const Note = ({ note }) => {
   const deleteNoteTrigger = async () => {
     const prevNotes = user.notes;
 
+    const updatedNotes = user.notes.map((item) =>
+      item.id === note.id
+        ? { ...item, deleted: true, updatedAt: new Date() }
+        : item
+    );
     setUser({
       ...user,
-      notes: user.notes.filter((item) => item.id !== note.id),
+      notes: updatedNotes,
     });
     setDialogOpen(false);
     try {
-      const response = await deleteNote({ id: note.id });
+      const response = await syncNotes(updatedNotes);
       if (response.success) {
+        setUser({ ...user, notes: response.notes });
         toast.success(response.message);
       } else {
         setUser({

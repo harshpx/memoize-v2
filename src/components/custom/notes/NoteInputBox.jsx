@@ -20,7 +20,7 @@ import { colors } from "@/lib/utils";
 import { toast } from "react-toastify";
 import { AppContext } from "@/store/AppContext";
 import useOutsideClick from "@/hooks/useOutsideClick";
-import { createNote } from "@/lib/features";
+import { createNote, syncNotes } from "@/lib/features";
 
 const NoteInputBox = () => {
   const isMobile = useMediaQuery("(max-width: 640px)");
@@ -62,6 +62,7 @@ const NoteInputBox = () => {
       content: content.trim(),
       color,
       pinned,
+      deleted: false,
       status: "active",
       updatedAt: new Date(),
     };
@@ -76,13 +77,21 @@ const NoteInputBox = () => {
     const previousNotes = user.notes;
     setUser({ ...user, notes: [...previousNotes, newNote] });
     try {
-      const response = await createNote(newNote);
+      // const response = await createNote(newNote);
+      // if (response.success) {
+      //   setUser({ ...user, notes: response.notes });
+      //   toast.success(response.message);
+      // } else {
+      //   setUser({ ...user, notes: previousNotes });
+      //   toast.error(res.message);
+      // }
+      const response = await syncNotes([...previousNotes, newNote]);
       if (response.success) {
         setUser({ ...user, notes: response.notes });
         toast.success(response.message);
       } else {
         setUser({ ...user, notes: previousNotes });
-        toast.error(res.message);
+        toast.error(response.message);
       }
     } catch (error) {
       setUser({ ...user, notes: previousNotes });

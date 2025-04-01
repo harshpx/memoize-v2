@@ -164,3 +164,16 @@ export const deleteNote = async ({ id }) => {
   });
   return await response.json();
 };
+
+
+export const syncNotes = async (notes) => {
+  const response = await fetch(`${BASE_URL}/note/sync`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getCookie("token")}`,
+    },
+    body: JSON.stringify({ notes }),
+  });
+  return await response.json();
+}
