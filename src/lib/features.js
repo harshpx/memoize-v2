@@ -51,7 +51,7 @@ export const fetchUser = async () => {
   return await response.json();
 };
 
-export const updateAvatar = async ({avatar}) => {
+export const updateAvatar = async ({ avatar }) => {
   const response = await fetch(`${BASE_URL}/user/update-avatar`, {
     method: "PUT",
     headers: {
@@ -61,7 +61,7 @@ export const updateAvatar = async ({avatar}) => {
     body: JSON.stringify({ avatar }),
   });
   return await response.json();
-}
+};
 
 // @url /user/check-username-availability
 // @method POST
@@ -165,7 +165,6 @@ export const deleteNote = async ({ id }) => {
   return await response.json();
 };
 
-
 export const syncNotes = async (notes) => {
   const response = await fetch(`${BASE_URL}/note/sync`, {
     method: "PUT",
@@ -176,4 +175,26 @@ export const syncNotes = async (notes) => {
     body: JSON.stringify({ notes }),
   });
   return await response.json();
-}
+};
+
+export const sendResetPasswordEmail = async (email) => {
+  const response = await fetch(`${BASE_URL}/user/send-reset-password`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  });
+  return await response.json();
+};
+
+export const resetPasswordViaLink = async (token, newPassword) => {
+  const response = await fetch(`${BASE_URL}/user/check-reset-password`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ token, newPassword }),
+  });
+  return await response.json();
+};

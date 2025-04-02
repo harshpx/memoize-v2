@@ -18,6 +18,7 @@ import { useContext, useState } from "react";
 import { loginUser } from "@/lib/features";
 import { setCookie } from "@/lib/utils";
 import { AppContext } from "@/store/AppContext";
+import Link from "next/link";
 
 const LoginForm = () => {
   const { setUser, setAuthenticated } = useContext(AppContext);
@@ -112,6 +113,7 @@ const LoginForm = () => {
             )}
           />
         </div>
+        <Link href="/reset-password" className="text-cyan-500 text-[13px] underline self-start">Forgot password?</Link>
         <Button
           type="submit"
           className="mt-4 w-1/2 sm:w-[150px] hover:bg-zinc-800 hover:text-white"
