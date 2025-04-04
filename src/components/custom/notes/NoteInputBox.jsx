@@ -88,7 +88,6 @@ const NoteInputBox = () => {
       const response = await syncNotes([...previousNotes, newNote]);
       if (response.success) {
         setUser({ ...user, notes: response.notes });
-        toast.success(response.message);
       } else {
         setUser({ ...user, notes: previousNotes });
         toast.error(response.message);

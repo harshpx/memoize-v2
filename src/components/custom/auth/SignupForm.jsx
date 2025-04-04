@@ -35,6 +35,8 @@ const SignupForm = () => {
   const [emailMessage, setEmailMessage] = useState("");
 
   const [waiting, setWaiting] = useState(false);
+  const [responseMessage, setResponseMessage] = useState("");
+  const [responseError, setResponseError] = useState(false);
 
   const debouncedUsername = useDebounce(inputUsername, 500);
   const debouncedEmail = useDebounce(inputEmail, 500);
@@ -111,7 +113,7 @@ const SignupForm = () => {
     try {
       setWaiting(true);
       const onSignupResponse = await registerUser(payload);
-      if (onSignupResponse.success) {
+      if (onSignupResponse?.success) {
         formController.reset(); // reset form
         setUsernameMessage(""); // reset username message
         setEmailMessage(""); // reset email message
@@ -120,10 +122,12 @@ const SignupForm = () => {
         setAuthenticated(true); // set authenticated in context
         toast.success(onSignupResponse?.message, { autoClose: 1000 }); // show success message
       } else {
-        toast.error(onSignupResponse?.message);
+        setResponseMessage(onSignupResponse?.message);
+        setResponseError(true);
       }
     } catch (error) {
-      toast.error("Unable to send signup request");
+      setResponseMessage("Unable to signup");
+      setResponseError(true);
     } finally {
       setWaiting(false);
     }
@@ -155,12 +159,14 @@ const SignupForm = () => {
                   <Input
                     type="text"
                     placeholder="Username"
-                    {...field}
+                    value={field.value}
                     onChange={(e) => {
                       field.onChange(e);
                       setInputUsername(e.target.value);
                       if (e.target.value) {
                         setUsernameMessage("");
+                        setResponseMessage("");
+                        setResponseError(false);
                       }
                     }}
                   />
@@ -200,12 +206,14 @@ const SignupForm = () => {
                   <Input
                     type="text"
                     placeholder="Email"
-                    {...field}
+                    value={field.value}
                     onChange={(e) => {
                       field.onChange(e);
                       setInputEmail(e.target.value);
                       if (e.target.value) {
                         setEmailMessage("");
+                        setResponseMessage("");
+                        setResponseError(false);
                       }
                     }}
                   />
@@ -276,6 +284,15 @@ const SignupForm = () => {
             )}
           />
         </div>
+        {responseMessage && (
+          <div
+            className={`text-center text-sm ${
+              responseError ? "text-red-600" : "text-green-600"
+            }`}
+          >
+            {responseMessage}
+          </div>
+        )}
         <Button
           type="submit"
           className="mt-4 w-1/2 sm:w-[150px] hover:bg-zinc-800 hover:text-white"

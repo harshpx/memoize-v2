@@ -1,5 +1,4 @@
 import Image from "next/image";
-import avatar from "animal-avatar-generator";
 import { Pencil } from "lucide-react";
 import { useContext, useState } from "react";
 import useMediaQuery from "@/hooks/useMediaQuery";

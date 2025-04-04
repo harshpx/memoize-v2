@@ -14,6 +14,12 @@ const NotePage = () => {
         <NoteInputBox />
       </div>
       {/* notes */}
+      {user?.notes?.filter((note) => !note.deleted)?.length === 0 && (
+        <div className="mt-10 w-full flex flex-col items-center justify-center gap-2">
+          <p className="text-neutral-300 text-lg">No notes available</p>
+          <p className="text-neutral-500 text-sm">Create a new note by clicking on Input Box or &apos;+&apos; button </p>
+        </div>
+      )}
       <div className="flex justify-center w-full">
         <div className="w-full columns-2 md:columns-3 lg:columns-4 xl:columns-5">
           {user?.notes

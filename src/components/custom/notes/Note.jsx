@@ -95,12 +95,11 @@ const Note = ({ note }) => {
       //   ...newData,
       // });
       const response = await syncNotes(updatedNotes);
-      if (response.success) {
+      if (response?.success) {
         setUser({
           ...user,
-          notes: response.notes,
+          notes: response?.notes,
         });
-        toast.success(response.message);
       } else {
         setUser({
           ...user,
@@ -110,7 +109,7 @@ const Note = ({ note }) => {
         setContent(prevNote.content);
         setColor(prevNote.color);
         setPinned(prevNote.pinned);
-        toast.error(res.message);
+        toast.error(res?.message);
       }
     } catch (error) {
       setUser({
@@ -140,15 +139,14 @@ const Note = ({ note }) => {
     setDialogOpen(false);
     try {
       const response = await syncNotes(updatedNotes);
-      if (response.success) {
+      if (response?.success) {
         setUser({ ...user, notes: response.notes });
-        toast.success(response.message);
       } else {
         setUser({
           ...user,
           notes: prevNotes,
         });
-        toast.error(res.message);
+        toast.error(res?.message);
       }
     } catch (error) {
       setUser({

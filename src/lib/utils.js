@@ -1,6 +1,5 @@
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import avatar from "animal-avatar-generator";
 import Cookies from "js-cookie";
 
 export function cn(...inputs) {
